@@ -27,23 +27,54 @@ warnings.filterwarnings(
 # How long a preview temp dir may live before it is swept. Long enough for the
 # frontend to load (possibly lazily) the rendered PNG, short enough to avoid
 # unbounded buildup during layout editing sessions.
-_PREVIEW_TEMP_MAX_AGE_SECONDS = 300
+_PREVIEW_TEMP_MAX_AGE_SECONDS = 900
+
+# Reference-counting tracker: maps dir path -> number of UI consumers.
+# The frontend calls _register_preview_consumer / _release_preview_consumer
+# so cleanup can skip dirs that are still on-screen.
+_PREVIEW_CONSUMER_COUNTS: Dict[str, int] = {}
+_PREVIEW_LOCK = __import__("threading").Lock()
+
+
+def _register_preview_consumer(dir_path: str) -> None:
+    """Record that a UI surface is displaying a preview from *dir_path*."""
+    with _PREVIEW_LOCK:
+        _PREVIEW_CONSUMER_COUNTS[dir_path] = _PREVIEW_CONSUMER_COUNTS.get(dir_path, 0) + 1
+
+
+def _release_preview_consumer(dir_path: str) -> None:
+    """Record that a UI surface no longer needs the preview from *dir_path*."""
+    with _PREVIEW_LOCK:
+        count = _PREVIEW_CONSUMER_COUNTS.get(dir_path, 0)
+        if count <= 1:
+            _PREVIEW_CONSUMER_COUNTS.pop(dir_path, None)
+        else:
+            _PREVIEW_CONSUMER_COUNTS[dir_path] = count - 1
 
 
 def _cleanup_preview_temp_dirs() -> None:
     """Sweep stale ``ftid_preview_*`` dirs from the system temp directory.
 
-    Cleanup is purely age-based: the frontend may still be displaying the
-    most recent composites, so only directories old enough that no UI can
-    still reference them are removed.
+    A directory is removed only when **both** conditions are met:
+    1. Its age exceeds ``_PREVIEW_TEMP_MAX_AGE_SECONDS``.
+    2. No UI consumer is still referencing it (reference count is 0).
+
+    This prevents the race where the frontend is still displaying a
+    composite while the sweeper deletes the underlying files.
     """
     cutoff = time.time() - _PREVIEW_TEMP_MAX_AGE_SECONDS
     try:
         temp_root = Path(tempfile.gettempdir())
         for stale in temp_root.glob("ftid_preview_*"):
             try:
-                if stale.is_dir() and stale.stat().st_mtime < cutoff:
-                    shutil.rmtree(stale, ignore_errors=True)
+                if not stale.is_dir():
+                    continue
+                if stale.stat().st_mtime >= cutoff:
+                    continue
+                with _PREVIEW_LOCK:
+                    if _PREVIEW_CONSUMER_COUNTS.get(str(stale), 0) > 0:
+                        continue
+                shutil.rmtree(stale, ignore_errors=True)
             except OSError:
                 continue
     except Exception:
