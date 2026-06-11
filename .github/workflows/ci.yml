@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  swift-build:
+    name: Build macOS Swift app
+    runs-on: macos-14
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build FTIDMacApp
+        working-directory: swift
+        run: swift build --disable-sandbox
+
+  python-validation:
+    name: Validate Python backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile Python sources
+        run: |
+          python -m compileall python swift/vendor/backend scripts
+
+      - name: Verify bundled backend sync
+        run: |
+          python scripts/check_backend_sync.py
+          python scripts/check_vendor_sync.py
+
+      - name: Install Python test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r python/requirements.txt
+
+      - name: Run Python unit tests
+        run: |
+          python -m unittest discover -s python/tests -p 'test_*.py' -q

@@ -1,0 +1,126 @@
+### macOS
+# Finder metadata
+.DS_Store
+
+# Thumbnails
+._*
+
+# Custom folder icons
+Icon
+
+# Volume root files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# App/editor local state
+*.swp
+*.swo
+*.tmp
+*.temp
+*.log
+*.bak
+*.orig
+.vscode/
+.idea/
+
+### Python
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+*.dylib
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# dotenv environment variable files
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.pytest_cache/
+.ruff_cache/
+
+# Type checkers
+.mypy_cache/
+.pyright/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# pyenv
+# .python-version
+
+### Swift
+# Xcode user settings
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Xcode build data
+DerivedData/
+.build/
+.swiftpm/
+.swift-home/
+
+# Swift/Obj-C specific
+*.hmap
+
+# Swift Package Manager
+Package.resolved
+
+# App packaging
+*.app
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcarchive
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+### Local generated runtime data
+# Keep source/templates/migrations tracked; keep generated user data out of git.
+Output/
+output/
+outputs/
+exports/
+reports/
+ErrorReports/
+logs/
+progress/
+barcodes/
+local_state/
+state/
+cache/
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+*.csv.tmp
+*.json.tmp

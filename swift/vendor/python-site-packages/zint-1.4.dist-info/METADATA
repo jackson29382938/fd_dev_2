@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: zint
+Version: 1.4
+Summary: Python ctypes interface to libzint
+Home-page: http://github.com/jmptbl/python-zint
+Author: Aragon Gouveia
+Author-email: aragon@phat.za.net
+License: BSD
+Keywords: zint ctypes
+License-File: LICENSE.rst
+
+Python-Zint is a ctypes interface to libzint of Robin Stuart's Zint project:
+
+<http://www.zint.org.uk/> <https://zint.github.io>
+
+Usage closely follows the C API:
+
+<http://www.zint.org.uk/Manual.aspx?type=p&page=5>

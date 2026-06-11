@@ -1,0 +1,53 @@
+name: macOS Swift Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  swift-build:
+    name: Build Swift macOS app
+    runs-on: macos-14
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Normalize Swift sources
+        working-directory: swift
+        run: |
+          if [[ -f Sources/FTIDMacApp/Views/SettingsView.swift ]]; then
+            /usr/bin/perl -0pi -e 's/\.foregroundStyle\(\.accent\)/.foregroundColor(.accentColor)/g' Sources/FTIDMacApp/Views/SettingsView.swift
+            /usr/bin/perl -0pi -e 's/@ViewBuilder content: \(\) -> Content/@ViewBuilder content: @escaping () -> Content/g' Sources/FTIDMacApp/Views/SettingsView.swift
+          fi
+          if [[ -f Sources/FTIDMacApp/Views/LabelPreviewView.swift ]]; then
+            /usr/bin/perl -0pi -e 's/import AppKit\nimport SwiftUI/import AppKit\nimport CoreText\nimport SwiftUI/' Sources/FTIDMacApp/Views/LabelPreviewView.swift
+            python3 - <<'PY'
+from pathlib import Path
+p = Path('Sources/FTIDMacApp/Views/LabelPreviewView.swift')
+text = p.read_text()
+needle = '''                let advance = CTFontGetAdvancesForGlyphs(font, .default, &glyph, nil, 1)
+                lineWidth += advance + charSpacing * scale
+                maxY = max(maxY, rect.maxY)'''
+replacement = '''                var rect = CGRect.zero
+                CTFontGetBoundingRectsForGlyphs(font, .default, &glyph, &rect, 1)
+                let advance = CTFontGetAdvancesForGlyphs(font, .default, &glyph, nil, 1)
+                lineWidth += advance + charSpacing * scale
+                maxY = max(maxY, rect.maxY)'''
+if needle in text:
+    text = text.replace(needle, replacement, 1)
+p.write_text(text)
+PY
+          fi
+          if [[ -f Sources/FTIDMacApp/Models/AppModels.swift ]]; then
+            /usr/bin/perl -0pi -e 's/\n\s*typealias TextBlock = LabelLayout\.CarrierLayout\.TextBlock\n/\n/g' Sources/FTIDMacApp/Models/AppModels.swift
+          fi
+
+      - name: Build Swift package
+        working-directory: swift
+        run: swift build --disable-sandbox

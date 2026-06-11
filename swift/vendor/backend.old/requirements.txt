@@ -1,0 +1,54 @@
+# Core HTTP/utility
+requests
+pydash
+
+# Imaging / barcodes
+Pillow
+python-barcode
+zint
+opencv-python
+pdf417gen
+qrcode
+
+# Barcode reading/decoding
+pylibdmtx==0.1.10
+pyzbar==0.1.9
+
+# Data import/export
+pandas
+openpyxl
+xlrd
+
+# Fuzzy matching
+RapidFuzz
+
+# Google Sheets/Drive integrations
+gspread
+oauth2client
+google-api-python-client
+google-auth
+
+# Parsing
+beautifulsoup4
+
+# Clipboard image helper
+pyperclipimg
+
+# Terminal output
+colorama==0.4.6
+rich
+
+# GUI
+customtkinter
+
+# PDF generation
+img2pdf
+
+# Environment variables
+python-dotenv
+
+# Telegram integration
+python-telegram-bot
+
+# macOS-specific (optional)
+pyobjc; sys_platform == "darwin"

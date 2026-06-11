@@ -1,0 +1,65 @@
+[
+  {
+    "timestamp": "2026-06-08T21:45:52.406605",
+    "maxicode_data": "9339589718964832635745",
+    "method": "FTID_USPS",
+    "tracking_number": "9339589718964832635745",
+    "sender_info": {
+      "name": "James Simmons",
+      "address": "228 N Gilbert Rd",
+      "city": "Gilbert",
+      "state": "AZ",
+      "zip_code": "85234"
+    },
+    "receiver_info": {
+      "name": "Kenneth Barnes",
+      "address": "1536 N Higley Rd",
+      "city": "Gilbert",
+      "state": "AZ",
+      "zip_code": "85234"
+    },
+    "preview": "FTID_USPS | 9339589718964832635745 | 93395897189648326357..."
+  },
+  {
+    "timestamp": "2026-06-08T21:45:05.432440",
+    "maxicode_data": "9402236106715000451570",
+    "method": "FTID_USPS",
+    "tracking_number": "9402236106715000451570",
+    "sender_info": {
+      "name": "Wayne Washington",
+      "address": "1517 N Gilbert Rd",
+      "city": "Gilbert",
+      "state": "AZ",
+      "zip_code": "85234"
+    },
+    "receiver_info": {
+      "name": "Lionel Ross",
+      "address": "375 Forsgate Dr",
+      "city": "Monroe Township",
+      "state": "NJ",
+      "zip_code": "08831"
+    },
+    "preview": "FTID_USPS | 9402236106715000451570 | 94022361067150004515..."
+  },
+  {
+    "timestamp": "2026-06-08T21:44:23.934252",
+    "maxicode_data": "1ZV520G90339258717",
+    "method": "FTID_UPS",
+    "tracking_number": "1ZV520G90339258717",
+    "sender_info": {
+      "name": "Isla Ortiz",
+      "address": "1600 East Lakeside Dr",
+      "city": "Gilbert",
+      "state": "AZ",
+      "zip_code": "85234"
+    },
+    "receiver_info": {
+      "name": "Emilia Greene",
+      "address": "6131 Telegraph Rd",
+      "city": "Los Angeles",
+      "state": "CA",
+      "zip_code": "90040"
+    },
+    "preview": "FTID_UPS | 1ZV520G90339258717 | 1ZV520G90339258717"
+  }
+]

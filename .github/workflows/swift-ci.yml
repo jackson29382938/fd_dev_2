@@ -1,0 +1,39 @@
+name: Swift CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'swift/**'
+      - '.github/workflows/swift-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'swift/**'
+      - '.github/workflows/swift-ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swift-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build macOS Swift package
+    runs-on: macos-14
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show toolchain versions
+        run: |
+          swift --version
+          xcodebuild -version
+
+      - name: Build Swift package
+        working-directory: swift
+        run: swift build --disable-sandbox

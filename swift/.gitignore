@@ -1,0 +1,17 @@
+.build/
+.swift-home/
+dist/
+__pycache__/
+*.pyc
+.DS_Store
+credentials.json
+venv_build/
+previous_maxicode.json
+vendor/backend/barcodes/
+vendor/backend/complete/
+vendor/backend/generated-labels/
+vendor/backend/progress/
+vendor/backend/ftid_gen/complete/
+vendor/backend/ftid_gen/progress/
+vendor/backend/requirements/credentials.json
+!vendor/python-site-packages/**/*.so
